@@ -1,0 +1,103 @@
+VisionInspect 项目结构目录树
+生成日期: 2026-06-24
+
+VisionInspect/
+├── src/
+│   ├── ImageLib.Core/                          # 图像处理核心接口与数据模型
+│   │   ├── IImageProcessor.cs                 # 算子统一接口
+│   │   ├── ImageData.cs                     # 图像数据封装
+│   │   ├── RegionData.cs                  # 区域数据封装
+│   │   ├── ProcessContext.cs               # 执行上下文
+│   │   ├── ProcessResult.cs               # 执行结果
+│   │   ├── ParamDef.cs                     # 参数定义
+│   │   ├── ProcessorAttribute.cs           # 算子元数据特性
+│   │   ├── ProcessorDiscovery.cs       # 算子自动发现
+│   │   ├── ImagePool.cs                    # 图像对象池
+│   │   └── ImageLib.Core.csproj
+│   │
+│   ├── ImageLib.HalconBridge/              # Halcon 引擎封装层
+│   │   ├── HalconEngine.cs            # Halcon 引擎单例
+│   │   └── ImageLib.HalconBridge.csproj
+│   │
+│   ├── ImageLib.Operators/                 # 图像处理算子实现
+│   │   ├── Acquisition/
+│   │   │   └── AcquisitionProcessor.cs      # 图像采集算子
+│   │   ├── Preprocessing/
+│   │   │   └── GrayScaleProcessor.cs    # 灰度化算子
+│   │   ├── Inspection/
+│   │   │   └── BlobAnalysisProcessor.cs # Blob分析算子
+│   │   └── ImageLib.Operators.csproj
+│   │
+│   ├── CommLib.Core/                      # 通讯核心接口
+│   │   ├── ICommunicationAdapter.cs   # 通讯适配器接口
+│   │   ├── CommTypes.cs             # 通讯相关类型
+│   │   ├── IDevice.cs               # 设备基础接口
+│   │   ├── DeviceInterfaces.cs     # 设备接口族
+│   │   └── CommLib.Core.csproj
+│   │
+│   ├── CommLib.SerialPort/              # 串口通讯
+│   │   ├── SerialPortAdapter.cs      # 串口适配器
+│   │   └── CommLib.SerialPort.csproj
+│   │
+│   ├── CommLib.Modbus/                # Modbus TCP
+│   │   ├── ModbusTcpAdapter.cs     # Modbus TCP 适配器
+│   │   └── CommLib.Modbus.csproj
+│   │
+│   ├── SystemLib.Core/                  # 系统操作核心接口
+│   │   ├── SystemInterfaces.cs     # 系统接口定义
+│   │   └── SystemLib.Core.csproj
+│   │
+│   ├── SystemLib.Services/              # 系统操作实现
+│   │   ├── Services.cs           # 服务实现
+│   │   └── SystemLib.Services.csproj
+│   │
+│   ├── WorkflowEngine.Core/       # 流程引擎
+│   │   ├── IRecipeExecutor.cs  # 执行器接口
+│   │   ├── RecipeDefinition.cs   # 流程定义模型
+│   │   ├── RecipeExecutor.cs   # 执行器实现
+│   │   ├── RecipeSerializer.cs # JSON 序列化
+│   │   └── WorkflowEngine.Core.csproj
+│   │
+│   └── App.Wpf/                   # WPF 主程序
+│       ├── Bootstrapper/
+│       │   └── AppBootstrapper.cs
+│       ├── Views/
+│       │   ├── ShellWindow.xaml
+│       │   └── ShellWindow.xaml.cs
+│       ├── ViewModels/
+│       │   └── ShellWindowViewModel.cs
+│       ├── Converters/
+│       │   └── NullToVisibilityConverter.cs
+│       ├── App.xaml
+│       ├── App.xaml.cs
+│       ├── NLog.config
+│       └── App.Wpf.csproj
+│
+├── tests/
+│   ├── ImageLib.Tests/               # 图像库测试
+│   │   ├── BlobAnalysisTests.cs
+│   │   └── ImageLib.Tests.csproj
+│   ├── CommLib.Tests/                # 通讯库测试
+│   │   ├── SerialPortAdapterTests.cs
+│   │   └── CommLib.Tests.csproj
+│   ├── WorkflowEngine.Tests/         # 流程引擎测试
+│   │   ├── RecipeExecutorTests.cs
+│   │   └── WorkflowEngine.Tests.csproj
+│   └── SystemLib.Tests/          # 系统库测试
+│       ├── SystemServicesTests.cs
+│       └── SystemLib.Tests.csproj
+│
+├── docs/
+│   ├── stages/
+│   │   ├── 01-项目启动/
+│   │   │   ├── 里程碑记录.md
+│   │   │   ├── 接口定义规范.md
+│   │   │   └── 项目结构目录树.txt
+│   │   └── 02-阶段一-地基/
+│   │       └── 阶段总结.md
+│   └── templates/              # 文档模板
+│       └── ...
+│
+├── demo_recipe.json           # 演示流程文件
+├── .editorconfig          # 代码风格配置
+└── VisionInspect.sln    # 解决方案文件

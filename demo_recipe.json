@@ -1,0 +1,60 @@
+{
+  "id": "demo_001",
+  "name": "演示流程-芯片缺陷检测",
+  "version": "1.0",
+  "description": "采集图像 → 灰度化 → Blob分析 → 输出缺陷数量",
+  "steps": [
+    {
+      "id": "step_acquire",
+      "name": "图像采集",
+      "type": "ImageAcquisition",
+      "stopOnFailure": true,
+      "subSteps": [
+        {
+          "id": "node_acquire_1",
+          "processorType": "Acquisition",
+          "parameters": {
+            "ImagePath": "C:\\Images\\chip_sample.bmp",
+            "CameraId": ""
+          }
+        }
+      ],
+      "config": {}
+    },
+    {
+      "id": "step_grayscale",
+      "name": "灰度化",
+      "type": "Inspection",
+      "stopOnFailure": true,
+      "subSteps": [
+        {
+          "id": "node_gray_1",
+          "processorType": "GrayScale",
+          "inputReference": "step_acquire.Output",
+          "parameters": {}
+        }
+      ],
+      "config": {}
+    },
+    {
+      "id": "step_blob",
+      "name": "Blob缺陷检测",
+      "type": "Inspection",
+      "stopOnFailure": false,
+      "subSteps": [
+        {
+          "id": "node_blob_1",
+          "processorType": "BlobAnalysis",
+          "inputReference": "step_grayscale.Output",
+          "parameters": {
+            "MinArea": 100,
+            "MaxArea": 999999,
+            "Threshold": 128,
+            "Invert": false
+          }
+        }
+      ],
+      "config": {}
+    }
+  ]
+}

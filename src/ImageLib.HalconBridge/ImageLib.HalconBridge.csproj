@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <!-- 安装 Halcon 22.x SDK 后取消注释: <DefineConstants>HAS_HALCON</DefineConstants> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ImageLib.Core\ImageLib.Core.csproj" />
+  </ItemGroup>
+
+  <!-- 安装 Halcon 22.x SDK 后取消注释:
+  <ItemGroup>
+    <Reference Include="HalconDotNet">
+      <HintPath>$(HALCONROOT)\bin\dotnet35\halcondotnet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  -->
+
+</Project>

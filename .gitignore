@@ -1,0 +1,27 @@
+.vs/
+.vscode/
+
+# Build outputs
+**/bin/
+**/obj/
+artifacts/
+TestResults/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
