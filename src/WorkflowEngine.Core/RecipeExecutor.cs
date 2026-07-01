@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using ImageLib.Core;
@@ -40,8 +41,8 @@ namespace WorkflowEngine.Core
                     {
                         if (ct.IsCancellationRequested) break;
 
-                        var processor = _serviceProvider.GetService(typeof(IImageProcessor)) as IImageProcessor;
-                        if (processor == null || processor.Id != subStep.ProcessorType)
+                        var processor = ResolveProcessor(subStep.ProcessorType);
+                        if (processor == null)
                         {
                             stepResult.IsSuccess = false;
                             stepResult.ErrorMessage = $"Processor '{subStep.ProcessorType}' not found.";
@@ -128,6 +129,53 @@ namespace WorkflowEngine.Core
             foreach (var kv in dict)
                 result[kv.Key] = kv.Value;
             return result;
+        }
+
+        private IImageProcessor ResolveProcessor(string processorType)
+        {
+            if (string.IsNullOrWhiteSpace(processorType))
+                return null;
+
+            var service = _serviceProvider.GetService(typeof(IImageProcessor)) as IImageProcessor;
+            if (service != null && string.Equals(service.Id, processorType, StringComparison.OrdinalIgnoreCase))
+                return service;
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var type in GetLoadableTypes(assembly))
+                {
+                    if (type == null || type.IsAbstract || !typeof(IImageProcessor).IsAssignableFrom(type))
+                        continue;
+
+                    if (type.GetConstructor(Type.EmptyTypes) == null)
+                        continue;
+
+                    var processor = Activator.CreateInstance(type) as IImageProcessor;
+                    if (processor == null)
+                        continue;
+
+                    if (string.Equals(processor.Id, processorType, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(type.Name, processorType, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(type.Name, processorType + "Processor", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return processor;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                return ex.Types.Where(t => t != null);
+            }
         }
     }
 }

@@ -27,6 +27,13 @@ namespace VisionInspect.Bootstrapper
             containerRegistry.RegisterSingleton<IImageProcessor, AcquisitionProcessor>(nameof(AcquisitionProcessor));
             containerRegistry.RegisterSingleton<IImageProcessor, GrayScaleProcessor>(nameof(GrayScaleProcessor));
             containerRegistry.RegisterSingleton<IImageProcessor, BlobAnalysisProcessor>(nameof(BlobAnalysisProcessor));
+            containerRegistry.RegisterSingleton<IImageProcessor, MeanFilterProcessor>(nameof(MeanFilterProcessor));
+            containerRegistry.RegisterSingleton<IImageProcessor, MedianFilterProcessor>(nameof(MedianFilterProcessor));
+            containerRegistry.RegisterSingleton<IImageProcessor, GaussianFilterProcessor>(nameof(GaussianFilterProcessor));
+            containerRegistry.RegisterSingleton<IImageProcessor, ImageEnhancementProcessor>(nameof(ImageEnhancementProcessor));
+            containerRegistry.RegisterSingleton<IImageProcessor, ShapeBasedMatchingProcessor>(nameof(ShapeBasedMatchingProcessor));
+            containerRegistry.RegisterSingleton<IImageProcessor, AffineTransformProcessor>(nameof(AffineTransformProcessor));
+            containerRegistry.RegisterSingleton<IImageProcessor, CaliperMeasurementProcessor>(nameof(CaliperMeasurementProcessor));
 
             // 通讯适配器
             containerRegistry.RegisterSingleton<ICommunicationAdapter, SerialPortAdapter>("SerialPort");

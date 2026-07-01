@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ImageLib.Core;
 using ImageLib.HalconBridge;
+using ImageLib.Operators;
 using SystemLib.Core;
 using WorkflowEngine.Core;
 using VisionInspect.Services;
@@ -62,6 +63,7 @@ namespace VisionInspect.ViewModels
             StopCommand = new DelegateCommand(ExecuteStop, () => IsExecuting);
             ClearLogCommand = new DelegateCommand(ExecuteClearLog);
 
+            LoadAvailableProcessors();
             _logger.Info("视觉检测平台已启动");
         }
 
@@ -200,10 +202,7 @@ namespace VisionInspect.ViewModels
             set => SetProperty(ref _selectedStepParams, value);
         }
 
-        public ObservableCollection<string> AvailableProcessors { get; } = new()
-        {
-            "Acquisition", "GrayScale", "BlobAnalysis"
-        };
+        public ObservableCollection<string> AvailableProcessors { get; } = new();
 
         // ========== 日志 ==========
 
@@ -614,6 +613,27 @@ namespace VisionInspect.ViewModels
                     };
                     SelectedStepParams.Add(paramVm);
                 }
+            }
+        }
+
+        private void LoadAvailableProcessors()
+        {
+            AvailableProcessors.Clear();
+
+            var processorIds = typeof(AcquisitionProcessor).Assembly
+                .GetTypes()
+                .Where(type => typeof(IImageProcessor).IsAssignableFrom(type) &&
+                               !type.IsAbstract &&
+                               type.GetConstructor(Type.EmptyTypes) != null)
+                .Select(type => Activator.CreateInstance(type) as IImageProcessor)
+                .Where(processor => processor != null)
+                .Select(processor => processor!.Id)
+                .Distinct()
+                .OrderBy(id => id);
+
+            foreach (var processorId in processorIds)
+            {
+                AvailableProcessors.Add(processorId);
             }
         }
 
